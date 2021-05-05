@@ -20,7 +20,7 @@
 
   table {
           border-collapse: collapse;
-          border-radius: 5px;
+          border-radius: 2px;
           border-style: hidden; /* hide standard table (collapsed) border */
           box-shadow: 0 0 0 1px #666; /* this draws the table border  */ 
       }
@@ -83,19 +83,19 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item active">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="">
               <i class="ti-desktop menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#ui-basic">
+            <a class="nav-link" href="detection">
               <i class="ti-target menu-icon"></i>
               <span class="menu-title">Detect Tomato</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#ui-basic">
+            <a class="nav-link" href="logs">
               <i class="ti-receipt menu-icon"></i>
               <span class="menu-title">Detection Logs</span>
             </a>
@@ -314,6 +314,17 @@
         "info":     false
     });
 } );
+
+// setTimeout(()=>{
+//   $('#table').DataTable().destroy();
+//     $('#table').DataTable({
+//       pageLength : 200,
+//       "paging":   true,
+//         "ordering": false,
+//         "info":     false
+//     });
+
+// },1000)
   </script>
 
 
