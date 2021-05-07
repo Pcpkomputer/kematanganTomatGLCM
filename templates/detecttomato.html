@@ -131,10 +131,10 @@
               <div class="card">
                 <div class="card-body">
                   {%if modelexist%}
-                    <form action="" method="POST" style="display: flex;flex-direction: row;">
+                    <form id="formFile" action="" enctype="multipart/form-data" method="POST" style="display: flex;flex-direction: row;">
                       <div class="form-group">
                         <label for="exampleFormControlFile1">Silakan Pilih Gambar</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                        <input id="fileGambar" name="file" type="file" class="form-control-file">
                       </div>
                       <div class="form-group" style="display: flex;flex-direction: column;justify-content: flex-end;">
                           <button id="btnProses" class="btn btn-secondary">Proses</button>
@@ -197,7 +197,9 @@
 
   document.querySelector("#btnProses").addEventListener("click",(e)=>{
       e.preventDefault();
-      alert("123");
+      if(document.querySelector("#fileGambar").value && document.querySelector("#fileGambar").value.match(/(.jpg|.png)/)){
+          document.querySelector("#formFile").submit();
+      }
   })
   </script>
 

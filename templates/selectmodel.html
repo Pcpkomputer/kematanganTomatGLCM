@@ -130,7 +130,11 @@
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-               
+                    {%if success%}
+                        <div class="alert alert-success" role="alert">
+                            {{success}}
+                        </div>
+                    {%endif%}
                     <form id="formFile" action="" enctype="multipart/form-data" method="POST" style="display: flex;flex-direction: row;">
                       <div class="form-group">
                         <label for="exampleFormControlFile1">Silakan Pilih Model</label>
