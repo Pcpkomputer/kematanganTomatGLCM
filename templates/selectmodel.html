@@ -88,7 +88,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="detection">
               <i class="ti-target menu-icon"></i>
               <span class="menu-title">Detect Tomato</span>
@@ -100,7 +100,7 @@
               <span class="menu-title">Detection Logs</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="model">
               <i class="ti-panel menu-icon"></i>
               <span class="menu-title">Select Model</span>
@@ -130,22 +130,18 @@
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  {%if modelexist%}
-                    <form action="" method="POST" style="display: flex;flex-direction: row;">
+               
+                    <form id="formFile" action="" enctype="multipart/form-data" method="POST" style="display: flex;flex-direction: row;">
                       <div class="form-group">
-                        <label for="exampleFormControlFile1">Silakan Pilih Gambar</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                        <label for="exampleFormControlFile1">Silakan Pilih Model</label>
+                        <input type="file" name="file" class="form-control-file" id="file">
                       </div>
                       <div class="form-group" style="display: flex;flex-direction: column;justify-content: flex-end;">
-                          <button id="btnProses" class="btn btn-secondary">Proses</button>
+                          <button id="btnProses" class="btn btn-secondary">Upload</button>
                       </div>
               
                     </form>
-                  {%else%}
-                    <div>
-                        Silakan upload model terlebih dahulu...
-                    </div>
-                  {%endif%}
+              
                 </div>
             </div>
             
@@ -197,7 +193,9 @@
 
   document.querySelector("#btnProses").addEventListener("click",(e)=>{
       e.preventDefault();
-      alert("123");
+      if(document.querySelector("#formFile #file").value!==""){
+          document.querySelectorAll("#formFile")[0].submit();
+      }
   })
   </script>
 
