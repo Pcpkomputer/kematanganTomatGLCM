@@ -138,19 +138,23 @@
                               <td scope="col" style="font-weight: bold;">Presentase (%)</td>
                               <td scope="col" style="font-weight: bold;">Time Used (Second)</td>
                               <td scope="col" style="font-weight: bold;">Status</td>
-                  
+                              <td scope="col" style="font-weight: bold;">Aksi</td>
                             </tr>
                         </thead>
                         <tbody>
                         {%for x in rows%}
-                            <tr>
+                              <tr>
                                 <td>
-                                    <image style="width:100px;height:100px" src="/static/classification/{{x[0]}}"></image>
+                                    <image style="width:100px;height:100px" src="/static/classification/{{x[1]}}"></image>
                                 </td>
-                                <td>{{x[1]}}</td>
-                                <td>{{x[2]}}</td>
-                                <td>{{x[3]}}</td>
-                                <td>{{x[4]}}</td>
+                                <td><span class="badge badge-pill badge-success">{{x[2]}}</span></td>
+                                <td>{{x[3]}}%</td>
+                                <td>{{x[4]}} ms</td>
+                                <td><span class="badge badge-pill badge-primary">{{x[5]}}</span></td>
+                                <td>
+                                  <button>Detail</button>
+                                  <button>Hapus</button>
+                                </td>
                             </tr>
                       {%endfor%}
                         </tbody>

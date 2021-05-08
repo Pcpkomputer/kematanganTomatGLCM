@@ -39,11 +39,14 @@ def index():
 @app.route("/detection", methods=["POST","GET"])
 def detection():
     if request.method=="POST" and request.files["file"]:
+        start = time.time()
+
         image = request.files["file"]
         id = str(uuid.uuid1())
         image.save("static/classification/"+id+".jpg")
         # PROSES PREPROCESSING
         image = cv2.imread("static/classification/"+id+".jpg")
+        
         #image = image[1408:1408+2208,0:0+2176]
         gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
         resize = cv2.resize(gray, (300,500))
@@ -53,13 +56,39 @@ def detection():
 
         model = keras.models.load_model("model.h5")
         logits = model.predict([feature])
-        
-        print(tensorflow.nn.softmax(logits))
 
-        return "123"
+        font = cv2.FONT_HERSHEY_SIMPLEX
+     
+        
+        result = tensorflow.nn.softmax(logits)
+        indexmax = np.argmax(result)
+
+
+        if indexmax==0:
+            label = "Setengah matang"
+        elif indexmax==1:
+            label = "Matang"
+        elif indexmax==2:
+            label = "Mentah"
+      
+        cv2.putText(image,label,(10,45), font, 1,(0,255,0),2)
+        labelledid = str(uuid.uuid1())
+        cv2.imwrite("static/labelled/"+labelledid+".jpg",image)
+
+        request_time = time.time() - start
+        percentage = str(float(result[0][indexmax])*100)
+
+        mydb.connect()
+        cursor=mydb.cursor()
+        cursor.execute("INSERT INTO rekamjejak VALUES (NULL,%s,%s,%s,%s,%s,%s,NOW())",(id+".jpg",label,percentage,str(request_time),"Classified",labelledid+".jpg"))
+        mydb.commit()
+        cursor.close()
+
+
+        return render_template("detecttomato.html",detectpage=True,percentage=percentage,request_time=request_time,label=label, modelexist=True,imagelabelled = labelledid+".jpg", image=id+".jpg")
 
     modelexist = os.path.exists(os.path.join(os.getcwd(),"model.h5"))
-    return render_template("detecttomato.html",modelexist=modelexist)
+    return render_template("detecttomato.html",modelexist=modelexist,detectpage=False)
 
 @app.route("/logs")
 def logs():
@@ -69,7 +98,7 @@ def logs():
     rows = cursor.fetchall()
     cursor.close()
     mydb.close()
-
+    
     return render_template("detectionlogs.html",rows=rows)
 
 @app.route("/model", methods=["POST","GET"])

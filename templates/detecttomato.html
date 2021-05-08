@@ -130,7 +130,7 @@
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  {%if modelexist%}
+                  {%if modelexist and not detectpage%}
                     <form id="formFile" action="" enctype="multipart/form-data" method="POST" style="display: flex;flex-direction: row;">
                       <div class="form-group">
                         <label for="exampleFormControlFile1">Silakan Pilih Gambar</label>
@@ -141,6 +141,52 @@
                       </div>
               
                     </form>
+                  {%elif modelexist and detectpage%}
+                      <div class="row">
+                          <div class="col-lg-6 row" style="margin:0px">
+                              <div style="padding:0px">
+                                  <div class="row">
+                                      <div class="col-md-12 col-lg-6 mb-3">
+                                        <label>Kematangan :</label>
+                                        <input readonly value="{{label}}" class="form-control" type="text">
+                                      </div>
+                                      <div class="col-md-12 col-lg-6 mb-3">
+                                        <label>Presentase(%) :</label>
+                                        <input readonly value="{{percentage}}%" class="form-control" type="text">
+                                      </div>
+                                      <div class="col-md-12 col-lg-6 mb-4">
+                                        <label>Time Used (ms) :</label>
+                                        <input readonly value="{{request_time}} ms" class="form-control" type="text">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-6">
+                              <div class="card">
+                                  <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs">
+                                      <li class="nav-item">
+                                        <a class="nav-link active" aria-current="true" href="#">Detection Result</a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  <div class="card-body" style="overflow: auto;">
+                                      <div style="display:flex;width:100%;justify-content: center;">
+                                          <image style="width: 50%;height: 400px;object-fit: contain;padding:20px;padding-top:0px" src="static/labelled/{{imagelabelled}}"></image>
+                                      </div>
+                                      <div>
+                                         <div class="mb-2" style="font-weight: bold;">Rangkuman Proses Pendeteksian :</div>
+                                          <div>1. Matriks gambar dibaca dari inputan.</div>
+                                          <div>2. Melakukan operasi cropping pada gambar dengan meng-crop bagian tengah sehingga hanya terlihat tomat secara keseluruhan.</div>
+                                          <div>3. Mengubah kanal gambar warna menjadi grayscale.</div>
+                                          <div>4. Melakukan operasi resize pada gambar ke ukuran 300x500</div>
+                                          <div>5. Melakukan ektraksi fitur GLCM dengan menghitung occurence pada properti ['dissimilarity', 'correlation', 'homogeneity', 'contrast', 'ASM', 'energy'] dengan tiap angle ['0', '45', '90','135'].</div>
+                                          <div>6. Fitur dimasukkan ke dalam model MLP Neural Network untuk dilakukan klasifikasi.</div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                   {%else%}
                     <div>
                         Silakan upload model terlebih dahulu...
