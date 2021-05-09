@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, session
 import os
 import mysql.connector
 import psutil
@@ -13,6 +13,7 @@ from tensorflow import keras
 
 app = Flask(__name__)
 
+app.secret_key="GLCMTomat"
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -21,8 +22,70 @@ mydb = mysql.connector.connect(
   database="glcmkematangantomat"
 )
 
+
+@app.route("/logout")
+def logout():
+    session.pop("login")
+    return redirect(url_for("login"))
+
+@app.route("/login", methods=["POST","GET"])
+def login():
+    if 'login' in session:
+        return redirect(url_for("index"))
+    if request.method=="POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        mydb.connect()
+        cursor = mydb.cursor()
+        cursor.execute("SELECT * FROM user WHERE email=%s",(email,))
+        row = cursor.fetchone()
+        mydb.close()
+        cursor.close()
+
+        if row==None:
+            return render_template("login.html",error="Akun tidak ditemukan...")
+        e = row[1]
+        p = row[2]
+
+        if e==email and p==password:
+            session["login"] = True
+            return redirect(url_for("index"))
+        else:
+            return render_template("login.html",error="Login gagal...")
+    return render_template("login.html")
+
+
+@app.route("/logs/hapus/<id>")
+def hapuslogs(id):
+    if 'login' not in session:
+        return redirect(url_for("login"))
+    mydb.connect()
+    cursor = mydb.cursor()
+    cursor.execute("DELETE FROM rekamjejak WHERE id=%s",(id,))
+    mydb.commit()
+    cursor.close()
+    mydb.close()
+    
+    return redirect(url_for("logs"))
+
+@app.route("/logs/<id>")
+def detaillogs(id):
+    if 'login' not in session:
+        return redirect(url_for("login"))
+    mydb.connect()
+    cursor = mydb.cursor()
+    cursor.execute("SELECT * FROM rekamjejak WHERE id=%s",(id,))
+    row = cursor.fetchone()
+    cursor.close()
+    mydb.close()
+
+    return render_template("detaillog.html",detectpage=True,percentage=row[3],request_time=row[4],label=row[2], modelexist=True,imagelabelled = row[6], image=row[1])
+
 @app.route("/")
 def index():
+    if 'login' not in session:
+        return redirect(url_for("login"))
     start = time.time()
 
     mydb.connect()
@@ -38,6 +101,8 @@ def index():
 
 @app.route("/detection", methods=["POST","GET"])
 def detection():
+    if 'login' not in session:
+        return redirect(url_for("login"))
     if request.method=="POST" and request.files["file"]:
         start = time.time()
 
@@ -92,6 +157,8 @@ def detection():
 
 @app.route("/logs")
 def logs():
+    if 'login' not in session:
+        return redirect(url_for("login"))
     mydb.connect()
     cursor = mydb.cursor()
     cursor.execute("SELECT * FROM rekamjejak")
@@ -103,6 +170,8 @@ def logs():
 
 @app.route("/model", methods=["POST","GET"])
 def model():
+    if 'login' not in session:
+        return redirect(url_for("login"))
     if request.method=="POST" and request.files["file"]:
         request.files["file"].save("model.h5")
         return render_template("selectmodel.html",success="Model berhasil diupload...")

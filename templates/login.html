@@ -1,0 +1,46 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="">
+
+    <title>GLCM Kematangan Tomat</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.0/examples/sign-in/signin.css" rel="stylesheet">
+    <style>
+        .form-control:focus {
+        border-color: grey !important;
+        box-shadow: 0 0 5px grey !important;
+        }
+    </style>
+  </head>
+
+  <body class="text-center" style="background-color:#dddce1">
+    <form method="POST" action="" class="form-signin">
+      <h1 class="h3" style="font-size:35px;font-weight: bold;margin-bottom: 50px;">GLCM Tomat</h1>
+      {%if error%}
+            <div class="alert alert-warning" role="alert">
+                {{error}}
+            </div>
+      {%endif%}
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" name="email" style="outline:none" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <div class="checkbox mb-3">
+      </div>
+      <button class="btn btn-lg btn-secondary btn-block" type="submit">Masuk</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+    </form>
+  </body>
+</html>
